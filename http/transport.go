@@ -20,7 +20,6 @@ import (
 	"io"
 	"log"
 	"net"
-	"net/http/httptrace"
 	"net/textproto"
 	"net/url"
 	"reflect"
@@ -28,6 +27,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/nycu-ucr/gonet/http/httptrace"
 
 	"github.com/nycu-ucr/gonet/internal/godebug"
 

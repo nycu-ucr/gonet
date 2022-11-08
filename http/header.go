@@ -6,12 +6,13 @@ package http
 
 import (
 	"io"
-	"net/http/httptrace"
 	"net/textproto"
 	"sort"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/nycu-ucr/gonet/http/httptrace"
 
 	"github.com/nycu-ucr/gonet/http/internal/ascii"
 

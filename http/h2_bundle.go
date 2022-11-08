@@ -34,7 +34,7 @@ import (
 	"math"
 	mathrand "math/rand"
 	"net"
-	"net/http/httptrace"
+	"github.com/nycu-ucr/gonet/http/httptrace"
 	"net/textproto"
 	"net/url"
 	"os"

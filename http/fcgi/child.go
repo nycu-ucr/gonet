@@ -12,10 +12,11 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"net/http/cgi"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/nycu-ucr/gonet/http/cgi"
 
 	"github.com/nycu-ucr/gonet/http"
 )

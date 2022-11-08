@@ -18,13 +18,14 @@ import (
 	"mime"
 	"mime/multipart"
 	"net"
-	"net/http/httptrace"
 	"net/textproto"
 	"net/url"
 	urlpkg "net/url"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/nycu-ucr/gonet/http/httptrace"
 
 	"github.com/nycu-ucr/gonet/http/internal/ascii"
 
@@ -1037,7 +1038,7 @@ func readRequest(b *bufio.Reader) (req *Request, err error) {
 	if s, err = tp.ReadLine(); err != nil {
 		return nil, err
 	}
-	// println("net/http/request.go, readRequest, s = ", s)
+	// println("github.com/nycu-ucr/gonet/http/request.go, readRequest, s = ", s)
 	defer func() {
 		putTextprotoReader(tp)
 		if err == io.EOF {

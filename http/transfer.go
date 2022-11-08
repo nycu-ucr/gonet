@@ -10,7 +10,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"net/http/httptrace"
 	"net/textproto"
 	"reflect"
 	"sort"
@@ -18,6 +17,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/nycu-ucr/gonet/http/httptrace"
 
 	"github.com/nycu-ucr/gonet/http/internal/ascii"
 

@@ -11,7 +11,7 @@
 //
 // To use pprof, link this package into your program:
 //
-//	import _ "net/http/pprof"
+//	import _ "github.com/nycu-ucr/gonet/http/pprof"
 //
 // If your application is not already running an http server, you
 // need to start one. Add "github.com/nycu-ucr/gonet/http" and "log" to your imports and
