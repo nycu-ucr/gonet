@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"io"
 	"net/http/httptrace"
-	"net/http/internal/ascii"
 	"net/textproto"
 	"reflect"
 	"sort"
@@ -19,6 +18,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/nycu-ucr/gonet/http/internal/ascii"
 
 	"github.com/nycu-ucr/gonet/http/internal"
 

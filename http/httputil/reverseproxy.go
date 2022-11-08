@@ -14,12 +14,13 @@ import (
 	"mime"
 	"net"
 	"net/http"
-	"net/http/internal/ascii"
 	"net/textproto"
 	"net/url"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/nycu-ucr/gonet/http/internal/ascii"
 
 	"golang.org/x/net/http/httpguts"
 )

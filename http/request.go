@@ -19,13 +19,14 @@ import (
 	"mime/multipart"
 	"net"
 	"net/http/httptrace"
-	"net/http/internal/ascii"
 	"net/textproto"
 	"net/url"
 	urlpkg "net/url"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/nycu-ucr/gonet/http/internal/ascii"
 
 	"golang.org/x/net/idna"
 )

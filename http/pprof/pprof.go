@@ -62,7 +62,6 @@ import (
 	"context"
 	"fmt"
 	"html"
-	"internal/profile"
 	"io"
 	"log"
 	"net/http"
@@ -75,6 +74,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/nycu-ucr/gonet/internal/profile"
 )
 
 func init() {
