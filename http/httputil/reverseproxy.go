@@ -13,12 +13,13 @@ import (
 	"log"
 	"mime"
 	"net"
-	"net/http"
 	"net/textproto"
 	"net/url"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/nycu-ucr/gonet/http"
 
 	"github.com/nycu-ucr/gonet/http/internal/ascii"
 
