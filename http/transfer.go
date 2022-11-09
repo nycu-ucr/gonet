@@ -24,7 +24,7 @@ import (
 
 	"github.com/nycu-ucr/gonet/http/internal"
 
-	"golang.org/x/net/http/httpguts"
+	"github.com/nycu-ucr/net/http/httpguts"
 )
 
 // ErrLineTooLong is returned when reading request or response bodies

@@ -14,7 +14,7 @@ import (
 
 	"github.com/nycu-ucr/gonet/http"
 
-	"golang.org/x/net/http/httpguts"
+	"github.com/nycu-ucr/net/http/httpguts"
 )
 
 // ResponseRecorder is an implementation of http.ResponseWriter that

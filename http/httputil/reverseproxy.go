@@ -23,7 +23,7 @@ import (
 
 	"github.com/nycu-ucr/gonet/http/internal/ascii"
 
-	"golang.org/x/net/http/httpguts"
+	"github.com/nycu-ucr/net/http/httpguts"
 )
 
 // ReverseProxy is an HTTP Handler that takes an incoming request and

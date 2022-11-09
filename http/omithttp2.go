@@ -18,7 +18,7 @@ func init() {
 
 const noHTTP2 = "no bundled HTTP/2" // should never see this
 
-var http2errRequestCanceled = errors.New("net/http: request canceled")
+var http2errRequestCanceled = errors.New("github.com/nycu-ucr/gonet/http: request canceled")
 
 var http2goAwayTimeout = 1 * time.Second
 
@@ -34,7 +34,10 @@ func (*http2Transport) CloseIdleConnections()                 {}
 
 type http2noDialH2RoundTripper struct{}
 
-func (http2noDialH2RoundTripper) RoundTrip(*Request) (*Response, error) { println("omit RT"); panic(noHTTP2) }
+func (http2noDialH2RoundTripper) RoundTrip(*Request) (*Response, error) {
+	println("omit RT")
+	panic(noHTTP2)
+}
 
 type http2noDialClientConnPool struct {
 	http2clientConnPool http2clientConnPool

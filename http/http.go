@@ -13,7 +13,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"golang.org/x/net/http/httpguts"
+	"github.com/nycu-ucr/net/http/httpguts"
 )
 
 // incomparable is a zero-width, non-comparable type. Adding it to a struct
@@ -43,7 +43,7 @@ type contextKey struct {
 	name string
 }
 
-func (k *contextKey) String() string { return "net/http context value " + k.name }
+func (k *contextKey) String() string { return "github.com/nycu-ucr/gonet/http context value " + k.name }
 
 // Given a string of the form "host", "host:port", or "[ipv6::address]:port",
 // return true if the string includes a port.

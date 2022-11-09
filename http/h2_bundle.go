@@ -47,9 +47,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"golang.org/x/net/http/httpguts"
-	"golang.org/x/net/http2/hpack"
-	"golang.org/x/net/idna"
+	"github.com/nycu-ucr/net/http/httpguts"
+	"github.com/nycu-ucr/net/http2/hpack"
+	"github.com/nycu-ucr/net/idna"
 )
 
 // The HTTP protocols are defined in terms of ASCII, not Unicode. This file
@@ -7799,7 +7799,7 @@ func (cc *http2ClientConn) closeForLostPing() error {
 
 // errRequestCanceled is a copy of net/http's errRequestCanceled because it's not
 // exported. At least they'll be DeepEqual for h1-vs-h2 comparisons tests.
-var http2errRequestCanceled = errors.New("net/http: request canceled")
+var http2errRequestCanceled = errors.New("github.com/nycu-ucr/gonet/http: request canceled")
 
 func http2commaSeparatedTrailers(req *Request) (string, error) {
 	keys := make([]string, 0, len(req.Trailer))
@@ -9162,7 +9162,7 @@ func (b http2transportResponseBody) Read(p []byte) (n int, err error) {
 		if int64(n) > cs.bytesRemain {
 			n = int(cs.bytesRemain)
 			if err == nil {
-				err = errors.New("net/http: server replied with more than declared Content-Length; truncated")
+				err = errors.New("github.com/nycu-ucr/gonet/http: server replied with more than declared Content-Length; truncated")
 				cs.abortStream(err)
 			}
 			cs.readErr = err
