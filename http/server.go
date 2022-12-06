@@ -2593,6 +2593,7 @@ func ServeTLS(l net.Listener, handler Handler, certFile, keyFile string) error {
 // A Server defines parameters for running an HTTP server.
 // The zero value for Server is a valid configuration.
 type Server struct {
+	USING_ONVM_SOCKET bool
 	// Addr optionally specifies the TCP address for the server to listen on,
 	// in the form "host:port". If empty, ":http" (port 80) is used.
 	// The service names are defined in RFC 6335 and assigned by IANA.
@@ -3003,9 +3004,19 @@ func (srv *Server) ListenAndServe() error {
 	if addr == "" {
 		addr = ":http"
 	}
-	// ln, err := net.Listen("tcp", addr)
-	println("\u001b[33m You are using ONVM \u001b[0m, gonet/http/server.go")
-	ln, err := onvmpoller.ListenONVM("onvm", addr)
+
+	var (
+		ln  net.Listener
+		err error
+	)
+
+	if srv.USING_ONVM_SOCKET {
+		println("\u001b[33m You are using ONVM \u001b[0m, gonet/http/server.go")
+		ln, err = onvmpoller.ListenONVM("onvm", addr)
+	} else {
+		println("\u001b[33m You are using TCP \u001b[0m, gonet/http/server.go")
+		ln, err = net.Listen("tcp", addr)
+	}
 
 	if err != nil {
 		return err
