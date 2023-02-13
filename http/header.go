@@ -5,6 +5,7 @@
 package http
 
 import (
+	"fmt"
 	"io"
 	"net/textproto"
 	"sort"
@@ -117,6 +118,14 @@ func (h Header) Clone() Header {
 		sv = sv[n:]
 	}
 	return h2
+}
+
+func (h Header) ToString() string {
+	s := ""
+	for k, v := range h {
+		s += fmt.Sprintf("%s %s\n", k, v[0])
+	}
+	return s
 }
 
 var timeFormats = []string{
