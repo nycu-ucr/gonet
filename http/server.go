@@ -3016,6 +3016,12 @@ func (srv *Server) ListenAndServe() error {
 	} else {
 		println("\u001b[33m You are using TCP \u001b[0m, gonet/http/server.go")
 		ln, err = net.Listen("tcp", addr)
+
+		/* Unix Domain Socket */
+		// println("\u001b[33m You are using UNIX \u001b[0m, gonet/http/server.go")
+		// unix_addr := fmt.Sprintf("/tmp/unix_%s", addr)
+		// fmt.Printf("Listen at %s\n", unix_addr)
+		// ln, err = net.Listen("unix", unix_addr)
 	}
 
 	if err != nil {
