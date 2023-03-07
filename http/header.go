@@ -123,7 +123,7 @@ func (h Header) Clone() Header {
 func (h Header) ToString() string {
 	s := ""
 	for k, v := range h {
-		s += fmt.Sprintf("%s %s\n", k, v[0])
+		s += fmt.Sprintf("%s&%s\n", k, v[0])
 	}
 	return s
 }
