@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/nycu-ucr/net v0.0.0-20230307120859-5f5d7afdaf03
-	github.com/nycu-ucr/onvmpoller v0.0.0-20230222141454-8145d720d05c
+	github.com/nycu-ucr/onvmpoller v0.0.0-20230320121227-d45eb5171b4e
 )
 
 require (
