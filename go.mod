@@ -3,7 +3,7 @@ module github.com/nycu-ucr/gonet
 go 1.19
 
 require (
-	github.com/nycu-ucr/net v0.0.0-20230307082433-9b26c4d2ffa5
+	github.com/nycu-ucr/net v0.0.0-20230307120859-5f5d7afdaf03
 	github.com/nycu-ucr/onvmpoller v0.0.0-20230222141454-8145d720d05c
 )
 

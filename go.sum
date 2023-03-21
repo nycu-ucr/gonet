@@ -5,8 +5,8 @@ github.com/cornelk/hashmap v1.0.8/go.mod h1:RfZb7JO3RviW/rT6emczVuC/oxpdz4UsSB2L
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/nycu-ucr/net v0.0.0-20230307082433-9b26c4d2ffa5 h1:9a7cGsUT+U8qbIpaXyfyK/ezL8sW4FTjTyh6XChXDkU=
-github.com/nycu-ucr/net v0.0.0-20230307082433-9b26c4d2ffa5/go.mod h1:YhEbietZ3Djp1HrSoJX3uSooye2EtI0EV+WrUOE7fs4=
+github.com/nycu-ucr/net v0.0.0-20230307120859-5f5d7afdaf03 h1:63CLILoS3GKYRDxUfhr+I6cA+qOkzVeeJIWtTwm5TzU=
+github.com/nycu-ucr/net v0.0.0-20230307120859-5f5d7afdaf03/go.mod h1:DOdS2y4k3JZ2dWZ9UHlhmfbSbxapyoykA9JsSELPR00=
 github.com/nycu-ucr/onvmpoller v0.0.0-20230222141454-8145d720d05c h1:4i0Ca0mJ+uFxBXAP0LJV7eiFVHxeBAvEYcesqQJDe9s=
 github.com/nycu-ucr/onvmpoller v0.0.0-20230222141454-8145d720d05c/go.mod h1:KGOJFB22ziiaSu3FEpKZLBmwwbH2XIvcI7AigdWRxNU=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
