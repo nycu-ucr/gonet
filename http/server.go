@@ -29,11 +29,36 @@ import (
 	"sync/atomic"
 	"time"
 
+	formatter "github.com/antonfisher/nested-logrus-formatter"
 	"github.com/nycu-ucr/gonet/internal/godebug"
-
 	"github.com/nycu-ucr/net/http/httpguts"
 	"github.com/nycu-ucr/onvmpoller"
+	"github.com/sirupsen/logrus"
 )
+
+const LOG_LEVEL = logrus.WarnLevel
+
+var (
+	logg *logrus.Logger
+	Log  *logrus.Entry
+)
+
+func init() {
+	logg = logrus.New()
+	logg.SetReportCaller(false)
+
+	/* Setup Logger */
+	logg.SetLevel(LOG_LEVEL)
+
+	logg.Formatter = &formatter.Formatter{
+		TimestampFormat: time.RFC3339,
+		TrimMessages:    true,
+		NoFieldsSpace:   true,
+		HideKeys:        true,
+		FieldsOrder:     []string{"component", "category"},
+	}
+	Log = logg.WithFields(logrus.Fields{"component": "ONVM-gonet-http", "category": "HTTP-Server"})
+}
 
 // Errors used by the HTTP server.
 var (
@@ -328,7 +353,12 @@ func (c *conn) hijackLocked() (rwc net.Conn, buf *bufio.ReadWriter, err error) {
 	buf = bufio.NewReadWriter(c.bufr, bufio.NewWriter(rwc))
 	if c.r.hasByte {
 		if _, err := c.bufr.Peek(c.bufr.Buffered() + 1); err != nil {
-			return nil, nil, fmt.Errorf("unexpected Peek failure reading buffered byte: %v", err)
+			if err.Error() == "EOP" {
+				// Absorb the error
+				c.bufr.Peek(c.bufr.Buffered() + 1)
+			} else {
+				return nil, nil, fmt.Errorf("unexpected Peek failure reading buffered byte: %v", err)
+			}
 		}
 	}
 	c.setState(rwc, StateHijacked, runHooks)
@@ -663,6 +693,7 @@ func (cr *connReader) lock() {
 func (cr *connReader) unlock() { cr.mu.Unlock() }
 
 func (cr *connReader) startBackgroundRead() {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).startBackgroundRead")
 	cr.lock()
 	defer cr.unlock()
 	if cr.inRead {
@@ -677,8 +708,9 @@ func (cr *connReader) startBackgroundRead() {
 }
 
 func (cr *connReader) backgroundRead() {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).backgroundRead")
 	n, err := cr.conn.rwc.Read(cr.byteBuf[:])
-	// println("github.com/nycu-ucr/gonet/http/server.go, backgroundRead, read n = ", n)
+	Log.Debugf("github.com/nycu-ucr/gonet/http/server.go, (*connReader).backgroundRead, b: %v", cr.byteBuf)
 	cr.lock()
 	if n == 1 {
 		cr.hasByte = true
@@ -715,6 +747,8 @@ func (cr *connReader) backgroundRead() {
 	cr.inRead = false
 	cr.unlock()
 	cr.cond.Broadcast()
+	Log.Debugf("github.com/nycu-ucr/gonet/http/server.go, (*connReader).backgroundRead, (hasByte, aborted, inRead)=(%v,%v,%v)",
+		cr.hasByte, cr.aborted, cr.inRead)
 }
 
 func (cr *connReader) abortPendingRead() {
@@ -759,6 +793,7 @@ func (cr *connReader) closeNotify() {
 }
 
 func (cr *connReader) Read(p []byte) (n int, err error) {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).Read")
 	cr.lock()
 	if cr.inRead {
 		cr.unlock()
@@ -769,23 +804,28 @@ func (cr *connReader) Read(p []byte) (n int, err error) {
 	}
 	if cr.hitReadLimit() {
 		cr.unlock()
+		Log.Debugln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).Read, hitReadLimit")
 		return 0, io.EOF
 	}
 	if len(p) == 0 {
 		cr.unlock()
+		Log.Debugln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).Read, buffer length is zero")
 		return 0, nil
 	}
 	if int64(len(p)) > cr.remain {
 		p = p[:cr.remain]
+		Log.Debugln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).Read, int64(len(p)) > cr.remain")
 	}
 	if cr.hasByte {
 		p[0] = cr.byteBuf[0]
 		cr.hasByte = false
 		cr.unlock()
+		Log.Debugln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).Read, cr.hasByte")
 		return 1, nil
 	}
 	cr.inRead = true
 	cr.unlock()
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, (*connReader).Read, call underly Read")
 	n, err = cr.conn.rwc.Read(p)
 
 	cr.lock()
@@ -966,6 +1006,7 @@ var errTooLarge = errors.New("http: request too large")
 
 // Read next request from connection.
 func (c *conn) readRequest(ctx context.Context) (w *response, err error) {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, (*conn).readRequest")
 	if c.hijacked() {
 		return nil, ErrHijacked
 	}
@@ -1843,6 +1884,7 @@ func isCommonNetReadError(err error) bool {
 
 // Serve a new connection.
 func (c *conn) serve(ctx context.Context) {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, (*conn).serve")
 	c.remoteAddr = c.rwc.RemoteAddr().String()
 	ctx = context.WithValue(ctx, LocalAddrContextKey, c.rwc.LocalAddr())
 	var inFlightResponse *response
@@ -1995,10 +2037,10 @@ func (c *conn) serve(ctx context.Context) {
 		inFlightResponse = nil
 		w.cancelCtx()
 		if c.hijacked() {
-			// println("github.com/nycu-ucr/gonet/http/server.go, hijacked")
+			Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, hijacked")
 			return
 		}
-		// println("github.com/nycu-ucr/gonet/http/server.go, finishRequest")
+		Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, finishRequest")
 		w.finishRequest()
 		if !w.shouldReuseConnection() {
 			if w.requestBodyLimitHit || w.closedRequestBodyEarly() {
@@ -2048,6 +2090,7 @@ func (w *response) sendExpectationFailed() {
 // Hijack implements the Hijacker.Hijack method. Our response is both a ResponseWriter
 // and a Hijacker.
 func (w *response) Hijack() (rwc net.Conn, buf *bufio.ReadWriter, err error) {
+	Log.Tracef("github.com/nycu-ucr/gonet/http: (*response).Hijack")
 	if w.handlerDone.isSet() {
 		panic("github.com/nycu-ucr/gonet/http: Hijack called after ServeHTTP finished")
 	}
@@ -2931,6 +2974,7 @@ type serverHandler struct {
 }
 
 func (sh serverHandler) ServeHTTP(rw ResponseWriter, req *Request) {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, serverHandler.ServeHTTP")
 	handler := sh.srv.Handler
 	if handler == nil {
 		handler = DefaultServeMux
@@ -2951,12 +2995,6 @@ func (sh serverHandler) ServeHTTP(rw ResponseWriter, req *Request) {
 		}()
 	}
 
-	// println("github.com/nycu-ucr/gonet/http/server.go, ServeHTTP")
-	// for i := 0; i < 7; i++ {
-	// 	print("\r", i)
-	// 	time.Sleep(1 * time.Second)
-	// }
-	// println()
 	handler.ServeHTTP(rw, req)
 }
 
@@ -2998,6 +3036,7 @@ func AllowQuerySemicolons(h Handler) Handler {
 // ListenAndServe always returns a non-nil error. After Shutdown or Close,
 // the returned error is ErrServerClosed.
 func (srv *Server) ListenAndServe() error {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, ListenAndServe")
 	if srv.shuttingDown() {
 		return ErrServerClosed
 	}
@@ -3075,6 +3114,7 @@ var ErrServerClosed = errors.New("http: Server closed")
 // Serve always returns a non-nil error and closes l.
 // After Shutdown or Close, the returned error is ErrServerClosed.
 func (srv *Server) Serve(l net.Listener) error {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/server.go, (*Server).Serve")
 	if fn := testHookServerServe; fn != nil {
 		fn(srv, l) // call hook with unwrapped listener
 	}

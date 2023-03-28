@@ -1030,6 +1030,7 @@ func ReadRequest(b *bufio.Reader) (*Request, error) {
 }
 
 func readRequest(b *bufio.Reader) (req *Request, err error) {
+	Log.Traceln("github.com/nycu-ucr/gonet/http/request.go, readRequest")
 	tp := newTextprotoReader(b)
 	req = new(Request)
 
@@ -1038,7 +1039,7 @@ func readRequest(b *bufio.Reader) (req *Request, err error) {
 	if s, err = tp.ReadLine(); err != nil {
 		return nil, err
 	}
-	// println("github.com/nycu-ucr/gonet/http/request.go, readRequest, s = ", s)
+
 	defer func() {
 		putTextprotoReader(tp)
 		if err == io.EOF {
