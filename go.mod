@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
-	github.com/nycu-ucr/net v0.0.0-20230307120859-5f5d7afdaf03
+	github.com/nycu-ucr/net v0.0.0-20250421092837-e154d11df6a2
 	github.com/nycu-ucr/onvmpoller v0.0.0-20230807070551-64ddd3797912
 	github.com/sirupsen/logrus v1.9.0
 )
